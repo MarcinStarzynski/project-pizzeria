@@ -96,6 +96,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){
@@ -171,17 +172,34 @@
         // for every option in this category
         for(let optionId in param.options) {
 
+          //Find image in image wrapper
+          const image = thisProduct.imageWrapper.querySelector('.'  + paramId + '-' + optionId);
+
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
           console.log(optionId, option);
 
           // check if formData contains optionId
           if(formData[paramId] && formData[paramId].includes(optionId)) {
+
+            //If option is checked add active class for img
+            if(image !== null) {
+              console.log(image.classList);
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+
+            //If option is not default and is checked add option price to price
             if(!option.default == true) {
               price = price + option.price;
             }
 
           } else{
+            //If option is not checked remove active class from img
+            if(image !== null) {
+              image.classList.remove(classNames.menuProduct.imageVisible);
+            }
+
+            //If option is default and is unchecked decrease product price
             if(option.default == true) {
               price = price - option.price;
             }
