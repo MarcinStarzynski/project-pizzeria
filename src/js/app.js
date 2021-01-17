@@ -1,6 +1,6 @@
 import {settings, select} from './settings.js';
 import Cart from './components/Cart.js';
-import Product from './components/product.js';
+import Product from './components/Product.js';
 
 const app = {
   initMenu: function(){
@@ -22,7 +22,6 @@ const app = {
         return rawResponse.json();
       })
       .then(function(parsedResponse){
-        console.log('parsedResponse', parsedResponse);
 
         /* Save parsedResponse as thisApp.data.products */
         thisApp.data.products = parsedResponse;
@@ -32,7 +31,6 @@ const app = {
 
       });
 
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
 
   initCart: function(){

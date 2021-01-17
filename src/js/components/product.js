@@ -1,6 +1,6 @@
-import {select, templates, classNames} from '../settings.js';
-import {utils} from '../utils.js';
-import AmountWidget from './AmmountWidget.js';
+import {select, templates, classNames} from './../settings.js';
+import {utils} from './../utils.js';
+import AmountWidget from './AmountWidget.js';
 
 class Product{
   constructor(id, data){
@@ -219,7 +219,7 @@ class Product{
       params: thisProduct.prepareCartProductParams(),
     };
 
-    //console.log(productSummary);
+    console.log(productSummary);
 
     return productSummary;
   }

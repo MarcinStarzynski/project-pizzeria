@@ -1,5 +1,5 @@
-import {select} from '../settings.js';
-import AmountWidget from './AmmountWidget.js';
+import {select} from './../settings.js';
+import AmountWidget from './AmountWidget.js';
 
 class CartProduct {
   constructor(menuProduct, element) {
@@ -9,9 +9,11 @@ class CartProduct {
     thisCartProduct.id = menuProduct.id;
     thisCartProduct.name = menuProduct.name;
     thisCartProduct.amount = menuProduct.amount;
-    thisCartProduct.price = menuProduct.price;
-    thisCartProduct.priceSingle = menuProduct.priceSingle;
-    thisCartProduct.params = menuProduct.params;
+    thisCartProduct.price = menuProduct.priceMulti;
+    thisCartProduct.priceSingle = menuProduct.priceMulti / menuProduct.amount;
+    thisCartProduct.params = menuProduct.data.params;
+
+    console.log(menuProduct);
 
     thisCartProduct.getElements(element);
     thisCartProduct.initAmountWidget();
