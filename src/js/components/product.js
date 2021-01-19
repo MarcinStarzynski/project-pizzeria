@@ -200,10 +200,9 @@ class Product{
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
       detail: {
-        product: thisProduct,
+        product: thisProduct.prepareCartProduct(),
       },
     });
-
     thisProduct.element.dispatchEvent(event);
   }
 
@@ -218,8 +217,6 @@ class Product{
       price: thisProduct.priceMulti,
       params: thisProduct.prepareCartProductParams(),
     };
-
-    console.log(productSummary);
 
     return productSummary;
   }
@@ -261,7 +258,6 @@ class Product{
 
     }
 
-    // console.log(params);
     return params;
 
   }
