@@ -10,12 +10,11 @@ class Booking{
 
     thisBooking.tableSelected = '';
 
-    console.log(thisBooking.table);
-
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getdata();
     thisBooking.initTables();
+    thisBooking.initActions();
   }
 
   getdata(){
@@ -98,8 +97,16 @@ class Booking{
       }
     }
 
-    console.log(thisBooking.booked);
-    thisBooking.updateDom();
+    //console.log(thisBooking.booked);
+    thisBooking.updateDOM();
+  }
+  initActions(){
+    const thisBooking = this;
+    thisBooking.dom.bookingSubmit.addEventListener('click', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+      alert('Rezerwacja udana!');
+    });
   }
 
   makeBooked(date, hour, duration, table){
@@ -122,7 +129,7 @@ class Booking{
     }
   }
 
-  updateDom(){
+  updateDOM(){
     const thisBooking = this;
 
     thisBooking.date = thisBooking.datePicker.value;
@@ -177,7 +184,6 @@ class Booking{
           table.classList.toggle(classNames.booking.tableSelected);
           thisBooking.tableSelected = table.getAttribute('data-table');
         }
-        console.log(thisBooking.tableSelected);
       });
     }
 
@@ -188,6 +194,47 @@ class Booking{
     for(let table of thisBooking.dom.tables){
       table.classList.remove(classNames.booking.tableSelected);
     }
+  }
+
+  sendBooking(){
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.booking;
+
+    const payload = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      table: parseInt(thisBooking.tableSelected),
+      duration: parseInt(thisBooking.dom.duration.value),
+      ppl: parseInt(thisBooking.dom.ppl.value),
+      starters: [],
+      phone: parseInt(thisBooking.dom.phone.value),
+      address: thisBooking.dom.address.value,
+    };
+
+    for(let starter of thisBooking.dom.starters){
+      if(starter.checked == true){
+        payload.starters.push(starter.value);
+      }
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, options)
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(parsedResponse){
+        thisBooking.parsedResponse = {};
+        thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour, parsedResponse.duration, parsedResponse.table);
+        thisBooking.updateDOM();
+        thisBooking.resetTables();
+        console.log('parsedResponse', parsedResponse);
+      });
   }
 
   render(element){
@@ -202,10 +249,13 @@ class Booking{
     thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
     thisBooking.dom.datePicker = document.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = document.querySelector(select.widgets.hourPicker.wrapper);
-    thisBooking.dom.tablesWrapper = document.querySelector(select.containerOf.tables);
-
-
+    thisBooking.dom.bookingSubmit = document.querySelector(select.booking.formSubmit);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(select.cart.phone);
+    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.cart.address);
+    thisBooking.dom.duration = document.querySelector(select.booking.hourInput);
+    thisBooking.dom.ppl = document.querySelector(select.booking.pplInput);
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
   }
 
   initWidgets(){
@@ -220,13 +270,9 @@ class Booking{
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
     thisBooking.dom.wrapper.addEventListener('updated', function(){
-      thisBooking.updateDom();
+      thisBooking.updateDOM();
       thisBooking.resetTables();
     });
-
-    //thisBooking.dom.tablesWrapper.addEventListener('click', function(){
-    //thisBooking.initTables();
-    //});
   }
 }
 
