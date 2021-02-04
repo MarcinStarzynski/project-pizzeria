@@ -1,4 +1,4 @@
-/*global Handlebars */
+/* global Handlebars */
 
 export const select = {
   templateOf: {
@@ -71,7 +71,7 @@ export const select = {
     starters: '[name="starter"]'
   },
   nav: {
-    links: '.main-nav a',
+    links: 'a.button-link',
   },
 
 };
