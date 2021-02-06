@@ -150,3 +150,27 @@
     background-image: url(../../../images/assets/pizza-9.jpg);
   }
 }
+
+.main-carousel {
+  .carousel-cell {
+    .img-description, img {
+      flex: 1;
+      margin-right: $base-size;
+    }
+    span {
+      font-style: italic;
+    }
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  img {
+
+    width: 50%;
+    border-radius: $radius;
+  }
+  margin: (6*$base-size) auto;
+}
+.soc-media {
+  color: $color-main;
+}
